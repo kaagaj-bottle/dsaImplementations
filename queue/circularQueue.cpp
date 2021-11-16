@@ -14,6 +14,9 @@ public:
         mFront=size-1;
         mRear=size-1;
     }
+    ~CirQueue(){
+        delete[] mData;
+    }
     //returns true if the queue is empty
     //the queue being empty is denoted by front and rear pointing to the same position
     bool empty(){
