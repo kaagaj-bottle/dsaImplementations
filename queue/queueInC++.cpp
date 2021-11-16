@@ -16,6 +16,10 @@ public:
         mRear=-1;
     }
 
+    ~Queue(){
+        delete[] mData;
+    }
+
     //if mFront is greater than mRear then this function returns true
     bool empty()
     {
