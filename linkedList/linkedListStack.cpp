@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cassert>
 //linked stack implementation of stack
-//here the this->mNext is the head
 template<class T>
 class Stack
 {
