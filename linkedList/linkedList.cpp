@@ -176,7 +176,7 @@ T Node<T>::removeAtPos(int pos)
         //traverse such that temp1 points node to position just before the position at which node is to be removed
         //for example ^^if we want to remove node at 1st position we traverse such that temp1 points to node at zeroth position
         Node* temp1=mNext;
-        for(int i=0;i<pos-1;++pos)
+        for(int i=0;i<pos-1;++i)
         {
             temp1=temp1->mNext;
         }
