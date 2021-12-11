@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cassert>
+#include <string>
 //implementation of linked list with following features
 //1.    void insertFront(T value);
 //2.    void insertRear(T value);
@@ -127,7 +128,7 @@ T Node<T>::removeFront()
     //in this way the node at zeroth position is detached
     //the data in detached node is then stored the zeroth node deleted and then the data is simply returned
     mNext=temp->mNext;
-    int value=temp->mData;
+    T value=temp->mData;
     delete temp;
     return value;
 }
@@ -142,7 +143,7 @@ T Node<T>::removeRear()
     if(temp->mNext==nullptr)
     {
         mNext=nullptr;
-        int value=temp->mData;
+        T value=temp->mData;
         delete temp;
         return value;
     }
@@ -156,7 +157,7 @@ T Node<T>::removeRear()
     //temp2->mNext then is set to null ptr causing the last node to get detached
     temp2->mNext=nullptr;
     //the value in the last node is stored for returning and the node itself is deleted
-    int value=temp->mData;
+    T value=temp->mData;
     delete temp;
     return value;
 }
@@ -187,7 +188,7 @@ T Node<T>::removeAtPos(int pos)
         //^^temp to points to the node at 2nd position causing the node at 1st position to be detached
         temp1->mNext=temp2->mNext;
         //data is stored to return and node at 1st position is deleted
-        int value=temp2->mData;
+        T value=temp2->mData;
         delete temp2;
         return value;
     }
@@ -199,8 +200,9 @@ void Node<T>::print()
     Node* temp=mNext;
     while(temp!=NULL)
     {
-        printf("%d ",temp->mData);
+        std::cout<<temp->mData<<' ';
         temp=temp->mNext;
+
     }
     printf("\n");
 }
@@ -208,21 +210,11 @@ void Node<T>::print()
 
 int main()
 {
-   Node<int> list;
-    std::cout<<list.empty()<<'\n';
-    list.insertFront(0);
-    list.insertAtPos(1,1);
-    list.print();
-    std::cout<<list.removeAtPos(1)<<'\n';
-    list.insertRear(1);
-    list.insertRear(2);
-    list.insertRear(3);
-    list.insertAtPos(4,4);
-    list.insertAtPos(99,1);
-    list.print();
-    list.removeAtPos(1);
-    list.print();
-    std::cout<<list.removeAtPos(3)<<'\n';
+    Node<std::string> list;
+    list.insertFront("zishan");
+    list.insertAtPos("siddique",0);
+    list.insertAtPos("life",2);
+    list.removeAtPos(0);
     list.print();
     std::cin.get();
     return 0;
