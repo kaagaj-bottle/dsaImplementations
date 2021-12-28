@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cassert>
+//it is a circular list
 class Node{
     int mData;
     Node* mNext;
