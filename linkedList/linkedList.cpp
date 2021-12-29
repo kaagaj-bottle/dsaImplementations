@@ -19,6 +19,9 @@ private:
 
     T mData;
     Node* mNext;
+    //recursive function 
+    void recursiveCallForPrintingReverse(Node* temp);
+    void recursiveCallForReversal(Node* temp);
 public:
     Node()
     {
@@ -40,9 +43,14 @@ public:
     T removeRear();
     //removes the element from the desired position of the list and returns it 
     T removeAtPos(int pos);
-
+    //reverses the list using the iterative method
+    void reverseIterative();
+    //reverses the list using recursive method
+    void reverseRecursive();
     //just prints the whole list
     void print();
+    //print the list using recursion
+    void printReverseRecursively();
 };
 
 template<class T>
@@ -193,6 +201,40 @@ T Node<T>::removeAtPos(int pos)
         return value;
     }
 }
+//here the iterative method has been used to reverse
+template<class T>
+void Node<T>::reverseIterative()
+{
+    //pointers to track the previous, current and next addreses
+    Node *prev, *current, *next;
+
+    //when the list is reversed the first node becomes the last so the it's mNext component must point to a nullptr
+    prev=nullptr;
+    current=mNext;
+    while(current!=nullptr)
+    {
+        //the next node is tracked so as to not lose its address
+        next=current->mNext;
+        //current node's mNext component points to previous node
+        current->mNext=prev;
+        //since the current node now points to previous node the ex-current node now becomes previous node
+        prev=current;
+        //the current pointer points the upcoming node
+        current=next;
+
+    }
+    //here since current reaches the end of the list that is nullptr
+    //so prev points to the last node and 
+    //so head=prev helps us to again track the whole list using the head which is mNext
+    mNext=prev;
+}
+
+template<class T>
+void Node<T>::reverseRecursive()
+{
+    Node* temp=mNext;
+    recursiveCallForReversal(temp);
+}
 template<class T>
 void Node<T>::print()
 {
@@ -207,15 +249,55 @@ void Node<T>::print()
     printf("\n");
 }
 
+template<class T>
+void Node<T>::printReverseRecursively(){
+    Node* temp=mNext;
+    recursiveCallForPrintingReverse(temp);
+}
+template<class T>
+void Node<T>::recursiveCallForPrintingReverse(Node* temp)
+{
+    if(temp==nullptr)
+    {
+        return;
+    }
+    recursiveCallForPrintingReverse(temp->mNext);
+    std::cout<<temp->mData<<"\t";
+}
+
+template<class T>
+void Node<T>::recursiveCallForReversal(Node* temp1)
+{
+
+    if(temp1->mNext==nullptr)
+    {
+        mNext=temp1;
+        return;
+    }
+    recursiveCallForReversal(temp1->mNext);
+    Node* temp2=temp1->mNext;
+    temp2->mNext=temp1;
+    temp1->mNext=nullptr;
+    //a very stupid method to reverse using recursion
+    // if(temp==nullptr)
+    // {
+    //     return;
+    // }
+    // T data=removeFront();
+    // recursiveCallForReversal(temp->mNext);
+    // insertRear(data);
+}
 
 int main()
 {
     Node<std::string> list;
     list.insertFront("zishan");
-    list.insertAtPos("siddique",0);
-    list.insertAtPos("life",2);
-    list.removeAtPos(0);
+    list.insertFront("siddique");
     list.print();
+    list.reverseRecursive();
+
+    list.print();
+    
     std::cin.get();
     return 0;
 }
