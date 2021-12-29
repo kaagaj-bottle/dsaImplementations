@@ -1,6 +1,5 @@
 #include <iostream>
 #include <cassert>
-//it is a circular list
 class Node{
     int mData;
     Node* mNext;
@@ -71,7 +70,32 @@ public:
         mNext=temp1;
         return freeNodeExtractData(temp2);
     }
+    
+    void insertAfter(int data, int key){
+        if(key==this->mNext->mData){
+            Node* temp1=getNode(data);
+            temp1->mNext=this->mNext->mNext;
+            this->mNext->mNext=temp1;
+            this->mNext=temp1;
+            return;
+        }
 
+        Node* temp1=this->mNext->mNext;
+        while((temp1->mData!=key)&&(temp1!=mNext)){
+            temp1=temp1->mNext;
+        }
+        if(temp1==mNext){
+            std::cout<<"key unavailable, insert unsuccessful \n";
+            return;
+        }
+        Node* temp2=getNode(data);
+        temp2->mNext=temp1->mNext;
+        temp1->mNext=temp2;
+    }
+
+    int removeAfter(int key){
+
+    }
     void printList(){
         if(empty()){
             return;
@@ -95,12 +119,8 @@ int main(){
     n.insertFront(4);
     n.insertRear(0);
     n.insertRear(-1);
-    std::cout<<n.removeRear()<<std::endl;
-    std::cout<<n.removeRear()<<std::endl;
-    std::cout<<n.removeRear()<<std::endl;
-    std::cout<<n.removeRear()<<std::endl;
-    std::cout<<n.removeRear()<<std::endl;
-    std::cout<<n.removeRear()<<std::endl;
+    n.insertAfter(-2,-1);
+    n.insertAfter(99,-2);
     n.printList();
     std::cin.get();
     return 0;
