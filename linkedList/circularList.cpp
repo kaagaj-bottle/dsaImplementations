@@ -40,6 +40,13 @@ public:
 
     void insertRear(int data){
         Node* temp1=getNode(data);
+        if(empty()){
+            this->mNext=temp1;
+            temp1->mNext=this->mNext;
+            return;
+        }
+        
+        Node* temp1=getNode(data);
         temp1->mNext=this->mNext->mNext;
         this->mNext->mNext=temp1;
         this->mNext=temp1;
