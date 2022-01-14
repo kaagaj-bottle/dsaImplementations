@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm>
+#include <queue>
 // methods available in the following binary tree
 // ---------------------------------------------------------------
 // bool insert(T data);
@@ -36,6 +37,8 @@ private:
     void recurInTrav(Node<T>* root);
 
     void recurPostTrav(Node<T>* root);
+
+    void recurLevelTrav(Node<T>* root);
 public:
     BST();
        
@@ -48,6 +51,8 @@ public:
     void inTrav();
     
     void postTrav();
+
+    void levelTrav();
 
 };
 
@@ -115,9 +120,9 @@ int BST<T>::recurHeight(Node<T>* ptr){
     }
     else{
         return (std::max(recurHeight(ptr->mLeft),recurHeight(ptr->mRight))+1);
-        }
     }
-    //-----
+}
+  
 template<class T>
 void BST<T>::preTrav(){
     Node<T>* temp=mNode;
@@ -136,6 +141,26 @@ template<class T>
 void BST<T>::postTrav(){
     Node<T>* temp=mNode;
     recurPostTrav(temp);
+    std::cout<<'\n';
+}
+
+template<class T>
+void BST<T>::levelTrav(){
+    Node<T>* temp=mNode;
+    if(temp==nullptr){
+        return;
+    }
+    std::queue<Node<T>*> q;
+    q.push(temp);
+    while(!q.empty()){
+        Node<T>* cur=q.front();
+        std::cout<<cur->mData<<'\t';
+        if(cur->mLeft!=nullptr)
+            q.push(cur->mLeft);
+        if(cur->mRight!=nullptr)
+            q.push(cur->mRight);
+        q.pop();
+    }
     std::cout<<'\n';
 }
 
@@ -168,6 +193,12 @@ void BST<T>::recurPostTrav(Node<T>* root){
     recurPostTrav(root->mRight);
     std::cout<<root->mData<<'\t';
 }
+
+
+
+
+
+
 int main(){
     BST<int> t;
     t.insert(234);
@@ -175,15 +206,14 @@ int main(){
     t.insert(9);
     t.insert(4);
     t.insert(922);
-    
-    
-    std::cout<<t.getHeight()<<std::endl;
-
+    std::cout<<"LevelTraversal:\t\t";
+    t.levelTrav();
+    std::cout<<"PreTraversal:\t\t";
     t.preTrav();
+    std::cout<<"InTraversal:\t\t";
     t.inTrav();
+    std::cout<<"PostTraversal:\t\t";
     t.postTrav();
-
-
     std::cin.get();
     return 0;
 }
