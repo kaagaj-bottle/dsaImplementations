@@ -8,6 +8,9 @@
 // void preTrav();
 // void inTrav();
 // void postTrav();
+// void levelTrav();
+// bool search(T data);
+// void deleteData(T data);
 //----------------------------------------------------------------
 
 template<class Type>
