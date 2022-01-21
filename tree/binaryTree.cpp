@@ -54,6 +54,8 @@ public:
 
     void levelTrav();
 
+    bool search(T data);
+
 };
 
 template<class T>
@@ -194,6 +196,23 @@ void BST<T>::recurPostTrav(Node<T>* root){
     std::cout<<root->mData<<'\t';
 }
 
+template<class T>
+bool BST<T>::search(T data){
+    Node<T>* ptr=mNode;
+    while(ptr!=nullptr){
+        if(data==ptr->mData){
+            return true;
+        }
+        if(data>ptr->mData){
+            ptr=ptr->mRight;
+        }
+        else if(data<ptr->mData){
+            ptr=ptr->mLeft;
+        }
+       
+    }
+    return false;
+}
 
 
 
@@ -214,6 +233,7 @@ int main(){
     t.inTrav();
     std::cout<<"PostTraversal:\t\t";
     t.postTrav();
+    std::cout<<t.search(922)<<t.search(8)<<t.search(9);
     std::cin.get();
     return 0;
 }
