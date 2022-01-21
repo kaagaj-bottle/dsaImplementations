@@ -39,6 +39,12 @@ private:
     void recurPostTrav(Node<T>* root);
 
     void recurLevelTrav(Node<T>* root);
+
+    Node<T>* findMinForDeletion(Node<T>* node);
+
+    Node<T>* findMaxForDeletion(Node<T>* node);
+
+    Node<T>* recurDelete(Node<T>* root, T data);
 public:
     BST();
        
@@ -56,6 +62,7 @@ public:
 
     bool search(T data);
 
+    void deleteData(T data);
 };
 
 template<class T>
@@ -214,26 +221,82 @@ bool BST<T>::search(T data){
     return false;
 }
 
+template<class T>
+Node<T>* BST<T>::findMinForDeletion(Node<T>* node){
+    while(node->mLeft!=nullptr){
+        node=node->mLeft;
+    }
+    return node;
+}
 
+template<class T>
+Node<T>* BST<T>::findMaxForDeletion(Node<T>* node){
+    while(node->mRight!=nullptr){
+        node=node->mRight;
+    }
+    return node;
+}
 
+template<class T>
+Node<T>* BST<T>::recurDelete(Node<T>* root, T data){
+    if(root==nullptr){
+        return root;
+    }
+    else if(data>root->mData){
+        root->mRight=recurDelete(root->mRight,data);
+    }
+    else if(data<root->mData){
+        root->mLeft=recurDelete(root->mLeft,data);
+    }
+    else{
+        //if both the right as well as left sub tree is null
+        if((root->mLeft==nullptr)&&(root->mRight==nullptr)){
+            delete root;
+            root=nullptr;
+        }
+        //if one of the sub tree is null
+        else if(root->mLeft==nullptr){
+            Node<T>* temp=root->mRight;
+            delete root;
+            root=nullptr;
+        }
+        else if(root->mRight==nullptr){
+            Node<T>* temp=root->mLeft;
+            delete root;
+            root=nullptr;
+        }
+        //if none of the subtree is null
+        else{
+            Node<T>* temp1=findMaxForDeletion(root->mLeft); 
+            root->mData=temp1->mData;
+            root->mLeft=recurDelete(root->mLeft,temp1->mData);
+        }
+       
+    }
+     return root;
+}
+template<class T>
+void BST<T>::deleteData(T data){
+    if(!(this->search(data))){
+        std::cout<<"Error: the data entered doesn't exist \n";
+    }
+
+    recurDelete(mNode,data);
+
+}
 
 
 int main(){
     BST<int> t;
-    t.insert(234);
-    t.insert(3);
-    t.insert(9);
-    t.insert(4);
-    t.insert(922);
-    std::cout<<"LevelTraversal:\t\t";
+    int data[]={50,30,68,20,45,58,78,10,35,48,60,72,88};
+    
+    for(int i=0;i<13;++i){
+
+        t.insert(data[i]);
+    }
     t.levelTrav();
-    std::cout<<"PreTraversal:\t\t";
-    t.preTrav();
-    std::cout<<"InTraversal:\t\t";
-    t.inTrav();
-    std::cout<<"PostTraversal:\t\t";
-    t.postTrav();
-    std::cout<<t.search(922)<<t.search(8)<<t.search(9);
-    std::cin.get();
+    t.deleteData(50);
+    t.levelTrav();
+
     return 0;
 }
