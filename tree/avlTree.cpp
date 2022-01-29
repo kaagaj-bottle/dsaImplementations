@@ -39,11 +39,17 @@ private: //private methods
 
     int getBF(Node<T>* node);
 
+    Node<T>* findMinForDeletion(Node<T>* node);
+
+    Node<T>* findMaxForDeletion(Node<T>* node);
+
     Node<T>* recurInsert(Node<T>* node, T data);
 
     Node<T>* rightRotate(Node<T>* y);
 
     Node<T>* leftRotate(Node<T>* x);
+
+    Node<T>* recurDelete(Node<T>* root, T data);
     
 public:
     BBST(){
@@ -60,7 +66,7 @@ public:
 
     void insert(T data);
 
-    
+    void deleteData(T data);
 
 
 
@@ -194,6 +200,90 @@ Node<T>* BBST<T>::recurInsert(Node<T>* node, T data){
 }
 
 template<class T>
+Node<T>* BBST<T>::recurDelete(Node<T>* root, T data){
+    if(root==nullptr){
+        return root;
+    }
+    else if(data>root->mData){
+        root->mRight=recurDelete(root->mRight,data);
+    }
+    else if(data<root->mData){
+        root->mLeft=recurDelete(root->mLeft,data);
+    }
+    else{
+        //if both the right as well as left sub tree is null
+        if((root->mLeft==nullptr)&&(root->mRight==nullptr)){
+            delete root;
+            root=nullptr;
+            return root;
+        }
+        //if one of the sub tree is null
+        else if(root->mLeft==nullptr){
+            Node<T>* temp=root->mRight;
+            delete root;
+            root=nullptr;
+            return root;
+        }
+        else if(root->mRight==nullptr){
+            Node<T>* temp=root->mLeft;
+            delete root;
+            root=nullptr;
+            return root;
+        }
+        //if none of the subtree is null
+        else{
+            Node<T>* temp1=findMaxForDeletion(root->mLeft); 
+            root->mData=temp1->mData;
+            root->mLeft=recurDelete(root->mLeft,temp1->mData);
+            return root;
+        }
+       
+    }
+
+    root->mHeight=recurHeight(root);
+
+    int bf=getBF(root);
+
+    //left left case
+    if(bf<-1 && (data>root->mLeft->mData)){
+        return rightRotate(root);
+    }
+    //left right case
+    if(bf<-1 && (data<root->mLeft->mData)){
+        leftRotate(root->mLeft);
+        return rightRotate(root);
+    }
+    //right right case
+    if(bf>1 && (data<root->mRight->mData)){
+        return leftRotate(root);
+    }
+    //right left case
+    if(bf>1 && (data>root->mRight->mData)){
+        rightRotate(root->mRight);
+        return leftRotate(root);
+    }
+
+    return root;
+}
+
+
+template<class T>
+Node<T>* BBST<T>::findMinForDeletion(Node<T>* node){
+    while(node->mLeft!=nullptr){
+        node=node->mLeft;
+    }
+    return node;
+}
+
+template<class T>
+Node<T>* BBST<T>::findMaxForDeletion(Node<T>* node){
+    while(node->mRight!=nullptr){
+        node=node->mRight;
+    }
+    return node;
+}
+
+template<class T>
 void BBST<T>::levelTrav(){
     Node<T>* temp=mNode;
     if(temp==nullptr){
@@ -240,6 +330,16 @@ bool BBST<T>::search(T data){
     }
     return false;
 }
+
+template<class T>
+void BBST<T>::deleteData(T data){
+    if(!(this->search(data))){
+        std::cout<<"Error: the data entered doesn't exist \n";
+    }
+
+    mNode=recurDelete(mNode,data);
+
+}
 int main(){
   
     BBST<int> t;
@@ -248,7 +348,15 @@ int main(){
     t.insert(30);
     t.insert(40);
     t.insert(50);
-    
+    t.insert(60);
+    t.insert(70);
+    t.insert(80);
+    t.levelTrav();
+    t.deleteData(30);
+    t.levelTrav();
+    t.deleteData(10);
+    t.levelTrav();
+    t.deleteData(60);
     t.levelTrav();
     std::cin.get();
     return 0;
